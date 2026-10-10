@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Bitcoin Vanity Generator"
+description = "Generate Bitcoin vanity addresses in the browser by searching a user-defined private-key range locally, with a live BTC price ticker. Private keys never leave the device."
+version = "1.0.0"
+id = "artifacts/btc-vanity-generator"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21869
+
+[services.development]
+run = "pnpm --filter @workspace/btc-vanity-generator run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/btc-vanity-generator", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/btc-vanity-generator/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21869"
+BASE_PATH = "/"
