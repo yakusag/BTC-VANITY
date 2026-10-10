@@ -203,7 +203,7 @@ h1 { font-family:var(--app-font-display); letter-spacing:-.065em; font-size:clam
 .history-table td:first-child { width:88px;color:#838984;white-space:nowrap; }
 .history-table td code { color:inherit;font:inherit;overflow-wrap:anywhere;word-break:break-all; }
 .history-table tr:last-child td { border-bottom:0; }
-.history-pagination { display:flex;justify-content:flex-end;gap:8px;margin-top:10px; }
+.history-pagination { display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:10px; }
 .history-pagination .small-button:disabled { opacity:.45;cursor:not-allowed; }
 .footer-note { max-width:920px;margin:21px auto 0;color:#8d928c;font-size:10px;display:flex;align-items:center;justify-content:space-between;gap:15px; }
 .footer-note span { display:flex;align-items:center;gap:7px; }

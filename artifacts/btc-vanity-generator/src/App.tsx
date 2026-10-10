@@ -343,21 +343,31 @@ function Home() {
     if (candidateRecords.length === 0) return;
 
     const escapeCsvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
-    const rows = [
-      ['Candidate', 'Bitcoin address'],
-      ...candidateRecords.map((record) => [
-        String(record.index),
-        record.address,
-      ]),
-    ];
-    const csv = `\uFEFF${rows
-      .map((row) => row.map(escapeCsvCell).join(','))
+    const csv = `\uFEFF${candidateRecords
+      .map((record) => escapeCsvCell(record.address))
       .join('\r\n')}`;
     const file = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const fileUrl = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = fileUrl;
     link.download = `bitcoin-addresses-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(fileUrl), 0);
+  };
+
+  const downloadAddressesTxt = () => {
+    if (candidateRecords.length === 0) return;
+
+    const addresses = `${candidateRecords
+      .map((record) => record.address)
+      .join('\n')}\n`;
+    const file = new Blob([addresses], { type: 'text/plain;charset=utf-8;' });
+    const fileUrl = URL.createObjectURL(file);
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = `bitcoin-addresses-${new Date().toISOString().slice(0, 10)}.txt`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -971,6 +981,7 @@ function Home() {
             </div>
             <div className="history-pagination">
               <button className="small-button download-addresses-button" type="button" onClick={downloadAddressesCsv} data-testid="button-download-addresses-csv"><Download aria-hidden="true" /> Download addresses CSV</button>
+              <button className="small-button download-addresses-button" type="button" onClick={downloadAddressesTxt} data-testid="button-download-addresses-txt"><Download aria-hidden="true" /> Download addresses TXT</button>
               {historyPageCount > 1 && <>
                 <button className="small-button" type="button" disabled={historyPage === 0} onClick={() => setHistoryPage((page) => Math.max(0, page - 1))} data-testid="button-history-newer">Earlier addresses</button>
                 <button className="small-button" type="button" disabled={historyPage >= historyPageCount - 1} onClick={() => setHistoryPage((page) => Math.min(historyPageCount - 1, page + 1))} data-testid="button-history-older">Later addresses</button>
